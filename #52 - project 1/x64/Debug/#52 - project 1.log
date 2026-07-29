@@ -1,4 +1,4 @@
 ﻿  #52 - project 1.cpp
-C:\Users\aboub\source\repos\Course #7 - Algorithms & Problem Solving Level 3\#52 - project 1\#52 - project 1\#52 - project 1.cpp(35,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\aboub\source\repos\Course #7 - Algorithms & Problem Solving Level 3\#52 - project 1\#52 - project 1\#52 - project 1.cpp(229,32): warning C4267: 'argument': conversion from 'size_t' to 'short', possible loss of data
+C:\Users\aboub\source\repos\Course #7 - Algorithms & Problem Solving Level 3\#52 - project 1\#52 - project 1\#52 - project 1.cpp(36,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\aboub\source\repos\Course #7 - Algorithms & Problem Solving Level 3\#52 - project 1\#52 - project 1\#52 - project 1.cpp(294,32): warning C4267: 'argument': conversion from 'size_t' to 'short', possible loss of data
   #52 - project 1.vcxproj -> C:\Users\aboub\source\repos\Course #7 - Algorithms & Problem Solving Level 3\#52 - project 1\x64\Debug\#52 - project 1.exe

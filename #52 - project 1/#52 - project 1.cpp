@@ -8,6 +8,7 @@
 using namespace std;
 
 const string ClientsFile = "MyClients.txt";
+const string Delimeter = "#//#";
 
 struct stClient
 {
@@ -20,11 +21,11 @@ struct stClient
 enum enMenu
 {
     ShowClientsList = 1,
-    AddClient = 2,
-    DeleteClient = 3,
-    UpdateClient = 4,
-    FindClient = 5,
-    Exit = 6
+    AddClient,
+    DeleteClient,
+    UpdateClient,
+    FindClient,
+    Exit
 };
 
 
@@ -44,7 +45,7 @@ vector<string> SplitString(string s, string delimeter) {
 
     return words;
 }
-stClient ConvertLineToRecord(string& line, string delimeter = "#//#") {
+stClient ConvertLineToRecord(string& line, string delimeter = Delimeter) {
     vector<string> data = SplitString(line, delimeter);
     stClient client;
 
@@ -56,7 +57,7 @@ stClient ConvertLineToRecord(string& line, string delimeter = "#//#") {
 
     return client;
 }
-string ConvertRecordToLine(stClient client, string delimeter = "#//#") {
+string ConvertRecordToLine(stClient client, string delimeter = Delimeter) {
     string s;
 
     s += client.AccountNumber + delimeter;
@@ -67,14 +68,14 @@ string ConvertRecordToLine(stClient client, string delimeter = "#//#") {
 
     return s;
 }
-vector<stClient> ConvertAllLinesToRecords(vector<string>& lines, string delimeter = "#//#") {
+vector<stClient> ConvertAllLinesToRecords(vector<string>& lines, string delimeter = Delimeter) {
     vector<stClient> AllClients;
     for (string& s : lines) {
         AllClients.push_back(ConvertLineToRecord(s));
     }
     return AllClients;
 }
-vector<string> ConvertAllRecordsToLines(vector<stClient> &AllClients, string delimeter = "#//#") {
+vector<string> ConvertAllRecordsToLines(vector<stClient> &AllClients, string delimeter = Delimeter) {
     vector<string> Lines;
     for (stClient& i : AllClients) {
         Lines.push_back(ConvertRecordToLine(i));
@@ -124,21 +125,6 @@ int IsClientExist(string AccountNumber, vector<stClient> &AllClients) {
     return -1;
 }
 
-stClient UpdateClientData(stClient& client) {
-    cout << "\nEnter Pin Code: ";
-    getline(cin >> ws, client.PinCode);
-
-    cout << "Enter Name: ";
-    getline(cin, client.Name);
-
-    cout << "Enter Phone: ";
-    getline(cin, client.Phone);
-
-    cout << "Enter Acount Balance: ";
-    cin >> client.AccountBalance;
-
-    return client;
-}
 int ReadNumInRange(string message, int from, int to) {
     int num;
     do
@@ -174,8 +160,7 @@ stClient ReadClientData(vector<stClient> &AllClients) {
     stClient client;
  
     while (true) {
-        int index = 0;
-        cout << "Enter Acount Number: ";
+        cout << "Enter Account Number: ";
         // ws to ignore all white spaces
         getline(cin >> ws, client.AccountNumber);
         if (IsClientExist(client.AccountNumber, AllClients) == -1) break;
@@ -196,6 +181,22 @@ stClient ReadClientData(vector<stClient> &AllClients) {
 
     return client;
 }
+stClient UpdateClientData(stClient& client) {
+    cout << "\nEnter Pin Code: ";
+    getline(cin >> ws, client.PinCode);
+
+    cout << "Enter Name: ";
+    getline(cin, client.Name);
+
+    cout << "Enter Phone: ";
+    getline(cin, client.Phone);
+
+    cout << "Enter Acount Balance: ";
+    cin >> client.AccountBalance;
+
+    return client;
+}
+
 
 void PrintClientData(stClient client) {
     cout << "Account Number  : " << client.AccountNumber << nl;
@@ -225,22 +226,12 @@ void PrintClientRecord(stClient& client) {
     cout << " | " << left << setw(15) << client.AccountBalance << " |";
 }
 
-void ShowAllClients(vector<stClient> &AllClients) {
-    PrintHeader(AllClients.size());
-
-    for (int i = 0; i < AllClients.size(); i++) {
-        PrintClientRecord(AllClients[i]);
-        if (i < AllClients.size() - 1) cout << nl;
-    }
-
-    PrintFooter();
-}
 void AddClients(vector<stClient> &AllClients) {
     char AddMoreClients = 'y';
     do
     {
-        system("cls");
-        cout << "Adding new client: \n" << nl;
+        //system("cls");
+        cout << "\nAdding new client: \n" << nl;
 
         stClient client = ReadClientData(AllClients);
         AllClients.push_back(client);
@@ -289,7 +280,7 @@ void UpdateClientByAccountNumber(string AccountNumber, vector<stClient> &AllClie
         cout << "Client with account number [ " << AccountNumber << " ] not exist!" << nl;
     }
 }
-void FindClientFun(string AccountNumber, vector<stClient> &AllClients) {
+void FindClientByAccountNumber(string AccountNumber, vector<stClient> &AllClients) {
     int index;
     if ((index = IsClientExist(AccountNumber, AllClients)) != -1) {
         PrintClientData(AllClients[index]);
@@ -298,12 +289,46 @@ void FindClientFun(string AccountNumber, vector<stClient> &AllClients) {
         cout << "Client with account number [ " << AccountNumber << " ] not exist!" << nl;
     }
 }
-void ExitFun() {
+
+void ShowAllClients(vector<stClient>& AllClients) {
+    PrintHeader(AllClients.size());
+
+    for (int i = 0; i < AllClients.size(); i++) {
+        PrintClientRecord(AllClients[i]);
+        if (i < AllClients.size() - 1) cout << nl;
+    }
+
+    PrintFooter();
+}
+void ShowAddNewClientsScreen(vector<stClient>& AllClients) {
     cout << "======================================\n";
-    cout << "\tProgram ends :-)\n";
+    cout << "\t\tAdd Clients:\n";
+    cout << "======================================\n";
+    AddClients(AllClients);
+}
+void ShowDeleteClientScreen(vector<stClient>& AllClients) {
+    cout << "======================================\n";
+    cout << "\t\tDelete Client:\n";
+    cout << "======================================\n";
+    DeleteClientByAccountNumber(ReadString("Enter Account Number: "), AllClients);
+}
+void ShowUpdateClientScreen(vector<stClient>& AllClients) {
+    cout << "======================================\n";
+    cout << "\t\tUpdate Client:\n";
+    cout << "======================================\n";
+    UpdateClientByAccountNumber(ReadString("Enter Account Number: "), AllClients);
+}
+void ShowFindClientScreen(vector<stClient>& AllClients) {
+    cout << "======================================\n";
+    cout << "\t\tFind Client:\n";
+    cout << "======================================\n";
+    FindClientByAccountNumber(ReadString("Enter Account Number: "), AllClients);
+}
+void ShowEndScreen() {
+    cout << "======================================\n";
+    cout << "\t\tProgram ends :-)\n";
     cout << "======================================\n";
 }
-
 void ShowMainMenu() {
     cout << "======================================\n";
     cout << "\t\tMain Menu\n";
@@ -317,7 +342,7 @@ void ShowMainMenu() {
     cout << "======================================\n";
 }
 
-void GoBack() {
+void GoBackToMainMenu() {
     cout << "\nPress any key to go back to main menu...";
     system("pause>nul");
     system("cls");
@@ -325,12 +350,10 @@ void GoBack() {
 
 
 
-
 int main()
 {
     vector<string> AllLines = LoadLinesFromFileToVector(ClientsFile);
     vector<stClient> AllClients = ConvertAllLinesToRecords(AllLines);
-    
     enMenu choice;
     do
     {
@@ -341,29 +364,28 @@ int main()
         switch (choice) {
         case enMenu::ShowClientsList:
             ShowAllClients(AllClients);
-            GoBack();
+            GoBackToMainMenu();
             break;
         case enMenu::AddClient:
-            AddClients(AllClients);
-            GoBack();
+            ShowAddNewClientsScreen(AllClients);
+            GoBackToMainMenu();
             break;
         case enMenu::DeleteClient:
-            DeleteClientByAccountNumber(ReadString("Enter Account Number: "), AllClients);
-            GoBack();
+            ShowDeleteClientScreen(AllClients);
+            GoBackToMainMenu();
             break;
         case enMenu::UpdateClient:
-            UpdateClientByAccountNumber(ReadString("Enter Account Number: "), AllClients);
-            GoBack();
+            ShowUpdateClientScreen(AllClients);
+            GoBackToMainMenu();
             break;
         case enMenu::FindClient:
-            FindClientFun(ReadString("Enter Account Number: "), AllClients);
-            GoBack();
+            ShowFindClientScreen(AllClients);
+            GoBackToMainMenu();
             break;
         case enMenu::Exit:
-            ExitFun();
+            ShowEndScreen();
             break;
         }
-
     } while (choice != enMenu::Exit);
 
     return 0;
