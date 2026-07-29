@@ -38,3 +38,6 @@ This project was built to practice:- File Handling
 
 ### Transactions Menu
 <img width="510" height="318" alt="image" src="https://github.com/user-attachments/assets/68ddca88-498a-4597-992f-67cb4bcbaf89" />
+
+### Total Balances
+<img width="899" height="674" alt="image" src="https://github.com/user-attachments/assets/d3cdea68-b9a3-4d3a-9af8-bf3282070cc2" />
